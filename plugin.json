@@ -1,0 +1,8 @@
+{
+    "name": "Articles",
+    "slug": "articles",
+    "version": "1.0.0",
+    "author": "Nexpell",
+    "description": "Article management system",
+    "api_version": 1
+}
