@@ -1,0 +1,38 @@
+.articles-image-hover .card-img-top {
+    transition: transform 0.35s ease;
+}
+
+.articles-image-hover:hover .card-img-top {
+    transform: scale(1.05);
+}
+
+.articles-detail-content {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    line-height: 1.7;
+    overflow-wrap: anywhere;
+}
+
+.articles-detail-content > * {
+    max-width: 100%;
+}
+
+.articles-detail-content p,
+.articles-detail-content ul,
+.articles-detail-content ol,
+.articles-detail-content blockquote,
+.articles-detail-content table {
+    margin-bottom: 1rem;
+}
+
+.articles-detail-content img,
+.articles-detail-content video,
+.articles-detail-content iframe {
+    max-width: 100%;
+    height: auto;
+}
+
+.articles-detail-content table {
+    width: 100%;
+}
