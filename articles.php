@@ -485,7 +485,7 @@ if ($action == "watch" && isset($_GET['id']) && is_numeric($_GET['id'])) {
         }
         $ratingpic .= '</span>';
 
-        $image = $article['banner_image'] ? "includes/plugins/articles/images/article/{$article['banner_image']}" : "includes/plugins/articles/images/no-image.jpg";
+        $image = $article['banner_image'] ? "/includes/plugins/articles/images/article/{$article['banner_image']}" : "/includes/plugins/articles/images/no-image.jpg";
 
         $profileUrl = SeoUrlHandler::convertToSeoUrl(
             'index.php?site=profile&userID=' . intval($article['userID'])
