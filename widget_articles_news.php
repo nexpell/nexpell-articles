@@ -27,7 +27,7 @@ $latest = safe_query("
     LIMIT 3
 ");
 
-// Hilfsfunktion: Text kuerzen
+// Hilfsfunktion: Text kürzen
 if (!function_exists('shortenText')) {
     function shortenText($text, $length = 200) {
         $text = trim((string)$text);
@@ -75,7 +75,7 @@ if (!function_exists('shortenText')) {
         <div class="articles-widget-news__date">
           <i class="bi bi-clock" aria-hidden="true"></i>
           <span>
-            <?= ($timestamp > 0) ? date('d.m.Y H:i', $timestamp) : 'Kein gueltiges Datum' ?>
+            <?= ($timestamp > 0) ? date('d.m.Y H:i', $timestamp) : 'Kein gültiges Datum' ?>
           </span>
         </div>
 
