@@ -4,64 +4,82 @@ if (!function_exists('safe_query')) {
     die('Access denied');
 }
 
-global $_database, $plugin;
+global $plugin;
 
-$modulname = 'articles';
-$version = isset($plugin['version']) ? (string)$plugin['version'] : ($version ?? '1.0.4');
-$pluginName = 'Articles';
-$pluginPath = 'includes/plugins/articles/';
+PluginInstallerHelper::install([
 
-if (!function_exists('articles_sql')) {
-    function articles_sql($value): string
-    {
-        return escape((string)$value);
-    }
-}
+    'modulname'  => 'articles',
+    'name'       => 'Articles',
+    'version'    => (string)($plugin['version'] ?? '0.0.0'),
+    'author'     => 'T-Seven',
+    'website'    => 'https://www.nexpell.de',
+    'path'       => 'includes/plugins/articles/',
 
-PluginInstallerHelper::registerPlugin([
-    'modulname'   => 'articles',
-    'name'        => 'Articles',
-    'version'     => $version,
-    'admin_file'  => 'admin_articles',
-    'path'        => $pluginPath,
-    'author'      => 'T-Seven',
-    'website'     => 'https://www.nexpell.de',
-    'index_link'  => 'articles',
-    'hiddenfiles' => '',
-    'sidebar'     => 'deactivated'
-]);
+    'admin_file' => 'admin_articles',
+    'index_link' => 'articles',
+    'sidebar'    => 'deactivated',
 
-PluginInstallerHelper::addLanguageItem('plugin_info_articles', 'articles', [
-    'de' => 'Mit diesem Plugin könnt ihr eure Artikel anzeigen lassen.',
-    'en' => 'With this plugin you can display your articles.',
-    'it' => 'Con questo plugin è possibile mostrare gli articoli sul sito web.'
-]);
+    'languages' => [
+        'plugin_info_articles' => [
+            'de' => 'Mit diesem Plugin könnt ihr eure Artikel anzeigen lassen.',
+            'en' => 'With this plugin you can display your articles.',
+            'it' => 'Con questo plugin è possibile mostrare gli articoli sul sito web.'
+        ]
+    ],
 
-PluginInstallerHelper::registerAdminNavigation([
-    'modulname' => 'articles',
-    'url'       => 'admincenter.php?site=admin_articles',
-    'catID'     => 8,
-    'sort'      => 1,
-    'labels'    => [
-        'de' => 'Artikel',
-        'en' => 'Articles',
-        'it' => 'Articoli'
+    'permissions' => [
+        'articles'
+    ],
+
+    'widgets' => [
+        [
+            'widget_key'    => 'widget_articles_news',
+            'title'         => 'Artikel Widget News',
+            'description'   => null,
+            'allowed_zones' => 'maintop,mainbottom'
+        ],
+        [
+            'widget_key'    => 'widget_articles_content',
+            'title'         => 'Artikel Widget Content',
+            'description'   => null,
+            'allowed_zones' => 'maintop,mainbottom'
+        ],
+        [
+            'widget_key'    => 'widget_articles_sidebar',
+            'title'         => 'Artikel Widget Sidebar',
+            'description'   => null,
+            'allowed_zones' => 'left,right'
+        ]
+    ],
+
+    'admin_navigation' => [
+        [
+            'url'   => 'admincenter.php?site=admin_articles',
+            'catID' => 8,
+            'sort'  => 1,
+            'labels' => [
+                'de' => 'Artikel',
+                'en' => 'Articles',
+                'it' => 'Articoli'
+            ]
+        ]
+    ],
+
+    'website_navigation' => [
+        [
+            'url'        => 'index.php?site=articles',
+            'mnavID'     => 3,
+            'sort'       => 1,
+            'indropdown' => 1,
+            'labels' => [
+                'de' => 'Artikel',
+                'en' => 'Articles',
+                'it' => 'Articoli'
+            ]
+        ]
     ]
-]);
 
-PluginInstallerHelper::registerWebsiteNavigation([
-    'modulname' => 'articles',
-    'url'       => 'index.php?site=articles',
-    'mnavID'    => 3,
-    'sort'      => 1,
-    'labels'    => [
-        'de' => 'Artikel',
-        'en' => 'Articles',
-        'it' => 'Articoli'
-    ]
 ]);
-
-PluginInstallerHelper::registerAdminRight('articles');
 
 safe_query("CREATE TABLE IF NOT EXISTS plugins_articles_categories (
   id INT(11) NOT NULL AUTO_INCREMENT,
@@ -116,18 +134,3 @@ safe_query("CREATE TABLE IF NOT EXISTS plugins_articles_settings (
 
 safe_query("INSERT IGNORE INTO plugins_articles_settings (articlessetID, articles, articleschars) VALUES
 (1, 4, 100)");
-
-safe_query("INSERT INTO settings_widgets
-  (widget_key, title, modulname, plugin, description, allowed_zones, active, version, created_at)
-VALUES
-  ('widget_articles_news', 'Artikel Widget News', 'articles', 'articles', NULL, 'maintop,mainbottom', 1, '" . articles_sql($version) . "', NOW()),
-  ('widget_articles_content', 'Artikel Widget Content', 'articles', 'articles', NULL, 'maintop,mainbottom', 1, '" . articles_sql($version) . "', NOW()),
-  ('widget_articles_sidebar', 'Artikel Widget Sidebar', 'articles', 'articles', NULL, 'left,right', 1, '" . articles_sql($version) . "', NOW())
-ON DUPLICATE KEY UPDATE
-  title = VALUES(title),
-  modulname = VALUES(modulname),
-  plugin = VALUES(plugin),
-  description = VALUES(description),
-  allowed_zones = VALUES(allowed_zones),
-  active = VALUES(active),
-  version = VALUES(version)");
